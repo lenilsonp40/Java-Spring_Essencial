@@ -3,6 +3,10 @@ package com.lenilson.park_api.web.controller;
 
 import com.lenilson.park_api.entity.Usuario;
 import com.lenilson.park_api.service.UsuarioService;
+import com.lenilson.park_api.web.dto.UsuarioCreateDto;
+import com.lenilson.park_api.web.dto.UsuarioResponseDto;
+import com.lenilson.park_api.web.dto.UsuarioSenhaDto;
+import com.lenilson.park_api.web.dto.mapper.UsuarioMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,22 +22,23 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity<Usuario> create(@RequestBody Usuario usuario) {
-        Usuario user = usuarioService.salvar(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    public ResponseEntity<UsuarioResponseDto> create(@RequestBody UsuarioCreateDto createDto) {
+        Usuario user = usuarioService.salvar(UsuarioMapper.toUsuario(createDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioMapper.toDto(user));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> getById(@PathVariable Long id) {
+    public ResponseEntity<UsuarioResponseDto> getById(@PathVariable Long id) {
         Usuario user = usuarioService.buscarPorId(id);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(UsuarioMapper.toDto(user));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Usuario> uptadePassword(@PathVariable Long id,
-                                                  @RequestBody Usuario usuario) {
-        Usuario user = usuarioService.editarSenha(id, usuario.getPassword());
-        return ResponseEntity.ok(user);
+    public ResponseEntity<Void> uptadePassword(@PathVariable Long id,
+                                                  @RequestBody UsuarioSenhaDto usuarioSenhaDto) {
+        Usuario user = usuarioService.editarSenha(id, usuarioSenhaDto.getSenhaAtual(), usuarioSenhaDto.getNovaSenha(),
+                usuarioSenhaDto.getConfirmaSenha());
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping()
