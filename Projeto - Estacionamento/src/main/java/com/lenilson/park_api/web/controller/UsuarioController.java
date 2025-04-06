@@ -7,6 +7,7 @@ import com.lenilson.park_api.web.dto.UsuarioCreateDto;
 import com.lenilson.park_api.web.dto.UsuarioResponseDto;
 import com.lenilson.park_api.web.dto.UsuarioSenhaDto;
 import com.lenilson.park_api.web.dto.mapper.UsuarioMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity<UsuarioResponseDto> create(@RequestBody UsuarioCreateDto createDto) {
+    public ResponseEntity<UsuarioResponseDto> create(@Valid @RequestBody UsuarioCreateDto createDto) {
         Usuario user = usuarioService.salvar(UsuarioMapper.toUsuario(createDto));
         return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioMapper.toDto(user));
     }
@@ -34,7 +35,7 @@ public class UsuarioController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> uptadePassword(@PathVariable Long id,
+    public ResponseEntity<Void> uptadePassword(@Valid @PathVariable Long id,
                                                   @RequestBody UsuarioSenhaDto usuarioSenhaDto) {
         Usuario user = usuarioService.editarSenha(id, usuarioSenhaDto.getSenhaAtual(), usuarioSenhaDto.getNovaSenha(),
                 usuarioSenhaDto.getConfirmaSenha());
@@ -42,9 +43,9 @@ public class UsuarioController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Usuario>> getAll() {
+    public ResponseEntity<List<UsuarioResponseDto>> getAll() {
         List<Usuario> users = usuarioService.buscarTodos();
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(UsuarioMapper.toListDto(users));
     }
 
 }
