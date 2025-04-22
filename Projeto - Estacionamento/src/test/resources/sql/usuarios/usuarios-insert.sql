@@ -1,0 +1,1 @@
+insert into USUARIOS (id, username, password, role) values(100. 'nena@gmail.com'. '125643', 'ROLE_ADMIN');
