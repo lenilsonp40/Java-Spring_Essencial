@@ -16,6 +16,7 @@ public class Produto {
         this.id = id;
     }
 
+
     public Double getPreco() {
         return preco;
     }

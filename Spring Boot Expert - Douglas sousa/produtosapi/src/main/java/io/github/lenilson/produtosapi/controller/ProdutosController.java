@@ -7,5 +7,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/produtos")
 public class ProdutosController {
 
-    sout("Hello World");
+    sout("Hello World!!");
 }
