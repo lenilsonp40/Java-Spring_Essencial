@@ -1,11 +1,27 @@
 package io.github.lenilson.produtosapi.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 // POJO (Plain Old Java Object)
+
+@Entity
+@Table(name = "produto") // essa annotation é opcional se o nome da tabela for igual ao nome da classe.
 public class Produto {
 
+    @Column(name= "id")
+    @Id
     private String id;
+
+    @Column(name= "nome")
     private String nome;
+
+    @Column(name= "preco")
     private Double preco;
+
+    @Column(name= "descricao")
     private String descricao;
 
     public String getId() {
